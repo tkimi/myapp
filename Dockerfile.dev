@@ -1,0 +1,29 @@
+ARG RUBY_VERSION=3.4.8-slim
+FROM docker.io/library/ruby:$RUBY_VERSION
+
+WORKDIR /app
+
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y \
+    build-essential \
+    curl \
+    git \
+    sqlite3 \
+    libjemalloc2 \
+    libvips \
+    libyaml-dev \
+    pkg-config && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+ENV BUNDLE_PATH=/usr/local/bundle
+
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
+
+ENV PATH="/usr/local/bundle/bin:$PATH"
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
