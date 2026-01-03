@@ -1,0 +1,9 @@
+FROM mcr.microsoft.com/playwright:v1.57.0-noble
+
+WORKDIR /app
+
+RUN npx playwright install --with-deps chromium
+
+EXPOSE 8888
+
+CMD ["npx", "playwright", "run-server", "--port", "8888", "--host", "0.0.0.0", "--path", "/ws"]

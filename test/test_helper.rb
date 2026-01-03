@@ -13,3 +13,10 @@ module ActiveSupport
     # Add more helper methods to be used by all tests here...
   end
 end
+
+Capybara.register_driver :remote_playwright do |app|
+  Capybara::Playwright::Driver.new(app,
+    browser_type: :chromium,
+    browser_server_endpoint_url: "ws://playwright:8888/ws"
+  )
+end
